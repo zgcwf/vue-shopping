@@ -41,55 +41,55 @@
 
 <script>
 export default {
-  name: "Login",
+  name: 'Login',
   data() {
     return {
       // 这是登录表单的数据绑定对象
       loginForm: {
-        username: "admin",
-        password: "123456",
+        username: 'admin',
+        password: '123456',
       },
       // 表单的验证规则
       loginFormRules: {
         username: [
           // required:必填，trigger:"blur" 一失去焦点触发验证
-          { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 3, max: 6, message: "长度在 3 到 6 个字符", trigger: "blur" },
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 3, max: 6, message: '长度在 3 到 6 个字符', trigger: 'blur' },
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, max: 9, message: "长度在 6 到 9 个字符", trigger: "blur" },
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 9, message: '长度在 6 到 9 个字符', trigger: 'blur' },
         ],
       },
-    };
+    }
   },
   methods: {
     // 重置表单
     resetLoginForm() {
       // console.log(this.$refs.loginFormRef);
       // 通过ref获取表单组件实例，调用element提供的resetFields方法重置为初始值
-      this.$refs.loginFormRef.resetFields();
+      this.$refs.loginFormRef.resetFields()
     },
-    // 登录前表单数据预验证
+    // 登录前表单数据预验证,验证后发送请求
     login() {
       // 通过ref获取表单组件实例，调用element提供的validate方法校验
       this.$refs.loginFormRef.validate(async (valid) => {
         // valid参数为一个布尔值，判断验证是否通过
-        if (!valid) return;
+        if (!valid) return
         // 解构赋值，将data重命名为res并提取出来
-        const { data: res } = await this.$http.post("login", this.loginForm);
-        if (res.meta.status !== 200) return this.$message.error("登录失败！");
-        this.$message.success("登录成功");
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (res.meta.status !== 200) return this.$message.error('登录失败！')
+        this.$message.success('登录成功')
         // 1. 将登录成功之后的 token，保存到客户端的 sessionStorage 中
         //   项目中出了登录之外的其他API接口，必须在登录之后才能访问
         //   token 只应在当前网站打开期间生效，所以将 token 保存在 sessionStorage 中
-        window.sessionStorage.setItem("token", res.data.token);
+        window.sessionStorage.setItem('token', res.data.token)
         // 2. 通过编程式导航跳转到后台主页，路由地址是 /home
-        this.$router.push("/home");
-      });
+        this.$router.push('/home')
+      })
     },
   },
-};
+}
 </script>
 
 <style lang="less" scoped>

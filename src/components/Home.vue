@@ -3,7 +3,7 @@
     <!-- 头部区域 -->
     <el-header>
       <div>
-        <img src="../assets/logo.png" alt="" />
+        <img src="../assets/heima.png" alt="" />
         <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
@@ -14,6 +14,14 @@
       <el-aside :width="isCollapse ? '64px' : '200px'">
         <div class="toggle-button" @click="toggleCollapse">|||</div>
         <!-- 侧边栏菜单区域 -->
+        <!--Element 提供的方法  
+           unique-opened 只能打开一个菜单
+           active-text-color 点击激活时的颜色 
+           :collapse="isCollapse" 是否折叠
+           :collapse-transition="false" 是否开启折叠动画
+           router 是否使用 vue-router 的模式，启用该模式会在激活导航时以 index 作为 path 进行路由跳转
+           :default-active="activePath" 当前激活菜单的 index
+        -->
         <el-menu
           background-color="#333744"
           text-color="#fff"
@@ -25,6 +33,7 @@
           :default-active="activePath"
         >
           <!-- 一级菜单 -->
+          <!-- index唯一标志.如果index（字符串）相同，则同步控制所有的菜单（展开或者收缩） -->
           <el-submenu
             :index="item.id + ''"
             v-for="item in menulist"
@@ -66,11 +75,11 @@
 
 <script>
 export default {
-  name: 'Home',
   data() {
     return {
       // 左侧菜单数据
       menulist: [],
+      // 一级菜单字体图标
       iconsObj: {
         125: 'iconfont icon-user',
         103: 'iconfont icon-tijikongjian',
@@ -85,21 +94,24 @@ export default {
     }
   },
   created() {
+    // 调用methods中的函数获取所有的左侧菜单
     this.getMenuList()
+    // 读取存储的activePath
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     logout() {
-      // 关闭时清空sessionStorage里的token，并跳转到login界面
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
     // 获取所有的菜单
     async getMenuList() {
+      // 解构赋值，将data重命名为res并提取出来，await后面跟一个promise，返回其成功的值
       const { data: res } = await this.$http.get('menus')
       if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      // 将所有的菜单数据放入menulist数组中
       this.menulist = res.data
-      console.log(res)
+      // console.log(res)
     },
     // 点击按钮，切换菜单的折叠与展开
     toggleCollapse() {
@@ -138,6 +150,7 @@ export default {
 .el-aside {
   background-color: #333744;
   .el-menu {
+    // 打开二级菜单多出一像素的右边框
     border-right: none;
   }
 }
@@ -158,5 +171,6 @@ export default {
   text-align: center;
   letter-spacing: 0.2em;
   cursor: pointer;
+  // 鼠标放入变成小手
 }
 </style>

@@ -89,6 +89,7 @@ const element = {
         Vue.use(TimelineItem)
         // 导入并使用弹框提示组件
         Vue.prototype.$message = Message
+        // 导入并使用MessageBox 弹框
         Vue.prototype.$confirm = MessageBox.confirm
     }
 }
