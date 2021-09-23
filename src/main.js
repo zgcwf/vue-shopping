@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import TreeTable from 'vue-table-with-tree-grid'
 // 导入全局样式表
 import './assets/css/global.css'
 // 导入字体图标
@@ -29,7 +30,8 @@ Vue.config.productionTip = false
 //引用并注册全局组件Icon,svg矢量图标，谁用谁引入
 import Icon from "@/components/Icon.vue";
 Vue.component("Icon", Icon);
-
+// 将富文本编辑器，注册为全局可用的组件
+Vue.component('tree-table', TreeTable)
 new Vue({
   router,
   store,

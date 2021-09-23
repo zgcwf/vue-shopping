@@ -105,7 +105,7 @@ export default {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
-    // 获取所有的菜单
+    // 获取左侧所有的菜单
     async getMenuList() {
       // 解构赋值，将data重命名为res并提取出来，await后面跟一个promise，返回其成功的值
       const { data: res } = await this.$http.get('menus')
