@@ -75,6 +75,7 @@
 
 <script>
 export default {
+  name: 'Home',
   data() {
     return {
       // 左侧菜单数据

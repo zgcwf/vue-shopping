@@ -10,7 +10,7 @@
     <!-- 卡片视图区域 -->
     <el-card>
       <!-- 搜索与添加区域 -->
-      <!--gutter	栅格间隔 20px  span	栅格占据的列数，一共24列
+      <!--el-row行，gutter	栅格间隔 20px  el-col列，span	栅格占据的列数，一共24列
        clearable  是否可清空， @clear	在点击由 clearable 属性生成的清空按钮时触发
        queryInfo.query是其查询参数
       -->
@@ -38,8 +38,9 @@
 
       <!-- 用户列表区域 -->
       <!--index 如果设置了 type=index，可以通过传递 index 属性来自定义索引
-      data	显示的数据 stripe	是否为斑马纹 border	是否带有纵向边框
-      label	显示的标题   prop是对应 列内容的字段名，也可以使用 property 属性
+      <el-table-column></el-table-column>表示一列
+      :data="userlist"显示的数据即其数据源， stripe	是否为斑马纹 border	是否带有纵向边框
+      label	显示的标题   prop是对应 列内容的字段名，是数据源里的属性，也可以使用 property 属性
       -->
       <el-table :data="userlist" border stripe height="450">
         <el-table-column type="index"></el-table-column>
@@ -59,6 +60,7 @@
         </el-table-column>
         <el-table-column label="操作" width="180px">
           <template slot-scope="scope">
+            <!-- 作用域插槽：scope.row可以拿到当前行的数据 -->
             <!-- 修改按钮 -->
             <el-button
               type="primary"
@@ -93,7 +95,7 @@
       </el-table>
 
       <!-- 分页区域 -->
-      <!-- :total数据总数
+      <!-- :total数据总数，layout底部显示多少数据
       @size-change 监视每页显示个数选择器，一改变则调用函数  
       page-sizes	每页显示个数选择器的选项设置
       page-size	每页显示条目个数，支持 .sync 修饰符  
@@ -177,7 +179,11 @@
       </span>
     </el-dialog>
 
-    <!-- 分配角色的对话框 -->
+    <!-- 分配角色的对话框
+    selectedRoleId / v-model	绑定值
+    :value	选项的值
+    label	选项的标签，若不设置则默认与 value 相同
+     -->
     <el-dialog
       title="分配角色"
       :visible.sync="setRoleDialogVisible"
@@ -210,6 +216,8 @@
 
 <script>
 export default {
+  name: 'Users',
+
   // 自定义邮箱和手机的校验规则
   data() {
     // 验证邮箱的规则
@@ -344,7 +352,7 @@ export default {
     },
     // 监听 switch 开关用户状态的改变
     async userStateChanged(userinfo) {
-      console.log(userinfo)
+      // console.log(userinfo)
       const { data: res } = await this.$http.put(
         `users/${userinfo.id}/state/${userinfo.mg_state}`
       )
@@ -485,7 +493,7 @@ export default {
       this.getUserList()
       this.setRoleDialogVisible = false
     },
-    // 监听分配角色对话框的关闭事件
+    // 监听分配角色对话框的关闭事件.重置
     setRoleDialogClosed() {
       this.selectedRoleId = ''
       this.userInfo = {}
