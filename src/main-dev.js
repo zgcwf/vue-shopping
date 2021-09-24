@@ -2,6 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+// 导入 NProgress 包对应的JS和CSS--点击路由跳转时显示进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+// 导入树状表格
 import TreeTable from 'vue-table-with-tree-grid'
 // 导入全局样式表
 import './assets/css/global.css'
@@ -15,13 +19,19 @@ Vue.use(element)
 
 import axios from "axios"
 // 设置接口基准地址
-// axios.defaults.baseURL = "http://127.0.0.1:8888/api/private/v1/"
-axios.defaults.baseURL = "http://139.9.202.95:8888/api/private/v1/"
+axios.defaults.baseURL = "http://127.0.0.1:8888/api/private/v1/"
 // 通过 axios 请求拦截器添加 token，保证拥有获取数据的权限。
+// 在 request 拦截器中，展示进度条 NProgress.start()
 axios.interceptors.request.use(config => {
+  NProgress.start()
   // 需要授权的 API ，必须在请求头中使用 `Authorization` 字段提供 `token` 令牌
   // 为请求头对象，添加 Token 验证的 Authorization 字段
   config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
+// 在 响应 拦截器中，隐藏进度条 NProgress.done()
+axios.interceptors.response.use(config => {
+  NProgress.done()
   return config
 })
 Vue.prototype.$http = axios

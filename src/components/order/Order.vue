@@ -22,15 +22,13 @@
       orderlist数据源
       prop：数据源中的对应属性
       -->
-      <el-table :data="orderlist" border stripe>
+      <el-table :data="orderlist" border stripe="">
         <el-table-column type="index"></el-table-column>
         <el-table-column label="订单编号" prop="order_number"></el-table-column>
         <el-table-column label="订单价格" prop="order_price"></el-table-column>
         <el-table-column label="是否付款" prop="pay_status">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.pay_status === '1'"
-              >已付款</el-tag
-            >
+            <el-tag type="success" v-if="scope.row.pay_status === '1'">已付款</el-tag>
             <el-tag type="danger" v-else>未付款</el-tag>
           </template>
         </el-table-column>
@@ -47,19 +45,9 @@
         <el-table-column label="操作">
           <template slot-scope="scope">
             <!-- 更改用户地址 -->
-            <el-button
-              size="mini"
-              type="primary"
-              icon="el-icon-edit"
-              @click="showBox"
-            ></el-button>
+            <el-button size="mini" type="primary" icon="el-icon-edit" @click="showBox(scope)"></el-button>
             <!-- 查看物流信息 -->
-            <el-button
-              size="mini"
-              type="success"
-              icon="el-icon-location"
-              @click="showProgressBox"
-            ></el-button>
+            <el-button size="mini" type="success" icon="el-icon-location" @click="showProgressBox"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -78,28 +66,15 @@
     </el-card>
 
     <!-- 修改地址的对话框 -->
-    <el-dialog
-      title="修改地址"
-      :visible.sync="addressVisible"
-      width="50%"
-      @close="addressDialogClosed"
-    >
+    <el-dialog title="修改地址" :visible.sync="addressVisible" width="50%" @close="addressDialogClosed">
       <!-- 
       model	表单数据对象
       rules	表单验证规则 
       prop	表单域 model 字段，传入 Form 组件的 model 中的字段
       label	标签文本 ref获取当前表单组件-->
-      <el-form
-        :model="addressForm"
-        :rules="addressFormRules"
-        ref="addressFormRef"
-        label-width="100px"
-      >
+      <el-form :model="addressForm" :rules="addressFormRules" ref="addressFormRef" label-width="100px">
         <el-form-item label="省市区/县" prop="address1">
-          <el-cascader
-            :options="cityData"
-            v-model="addressForm.address1"
-          ></el-cascader>
+          <el-cascader :options="cityData" v-model="addressForm.address1"></el-cascader>
         </el-form-item>
         <el-form-item label="详细地址" prop="address2">
           <el-input v-model="addressForm.address2"></el-input>
@@ -107,9 +82,7 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addressVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addressVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addressVisible = false">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -117,11 +90,7 @@
     <el-dialog title="物流进度" :visible.sync="progressVisible" width="50%">
       <!-- 时间线 -->
       <el-timeline>
-        <el-timeline-item
-          v-for="(activity, index) in state"
-          :key="index"
-          :timestamp="activity.time"
-        >
+        <el-timeline-item v-for="(activity, index) in state" :key="index" :timestamp="activity.time">
           {{ activity.context }}
         </el-timeline-item>
       </el-timeline>
@@ -153,12 +122,8 @@ export default {
         address2: '',
       },
       addressFormRules: {
-        address1: [
-          { required: true, message: '请选择省市区县', trigger: 'blur' },
-        ],
-        address2: [
-          { required: true, message: '请填写详细地址', trigger: 'blur' },
-        ],
+        address1: [{ required: true, message: '请选择省市区县', trigger: 'blur' }],
+        address2: [{ required: true, message: '请填写详细地址', trigger: 'blur' }],
       },
       cityData: cityData,
       progressVisible: false,
@@ -174,8 +139,7 @@ export default {
         {
           time: '2018-05-10 08:23:00',
           ftime: '2018-05-10 08:23:00',
-          context:
-            '[北京市]北京海淀育新小区营业点派件员 顺丰速运 95338正在为您派件',
+          context: '[北京市]北京海淀育新小区营业点派件员 顺丰速运 95338正在为您派件',
           location: '',
         },
         {
@@ -187,8 +151,7 @@ export default {
         {
           time: '2018-05-10 02:03:00',
           ftime: '2018-05-10 02:03:00',
-          context:
-            '快件在[北京顺义集散中心]已装车,准备发往 [北京海淀育新小区营业点]',
+          context: '快件在[北京顺义集散中心]已装车,准备发往 [北京海淀育新小区营业点]',
           location: '',
         },
         {
@@ -274,8 +237,9 @@ export default {
       this.getOrderList()
     },
     // 展示修改地址的对话框
-    showBox() {
+    showBox(scope) {
       this.addressVisible = true
+      // console.log(scope)
     },
     // 关闭时清空对话框内容
     addressDialogClosed() {
